@@ -213,14 +213,18 @@ function createPlayerItem(card){
     try{
       api.createController(node,{uri:'spotify:track:'+card.id,width:300,height:80},function(ctrl){
         if(item.destroyed){try{ctrl.destroy()}catch(e){}return}
-        item.controller=ctrl;item.ready=true;item.failed=false;clearTimeout(item.loadTimer);
+        item.controller=ctrl;
         try{
-          ctrl.addListener('ready',function(){if(item.destroyed)return;updateDiscUI();if(item.pendingPlay&&currentAudioItem===item){item.pendingPlay=false;playItem(item)}});
+          ctrl.addListener('ready',function(){
+            if(item.destroyed)return;
+            item.ready=true;item.failed=false;clearTimeout(item.loadTimer);
+            showRetry(item,false);updateDiscUI();
+            if(item.pendingPlay&&currentAudioItem===item){item.pendingPlay=false;playItem(item)}
+          });
           ctrl.addListener('playback_started',function(){if(item.destroyed)return;item.ended=false;item.playing=true;updateDiscUI()});
           ctrl.addListener('playback_update',function(e){if(item.destroyed)return;onPlaybackUpdate(item,(e&&e.data)||{})});
         }catch(e){}
-        showRetry(item,false);updateDiscUI();
-        if(item.pendingPlay&&currentAudioItem===item){item.pendingPlay=false;playItem(item)}
+        updateDiscUI();
       });
     }catch(err){item.failed=true;showRetry(item,true);updateDiscUI()}
   });
