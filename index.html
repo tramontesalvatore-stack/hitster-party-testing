@@ -205,12 +205,23 @@ drainSpotifyApiQueue();
 window.addEventListener('spotify-api-ready',drainSpotifyApiQueue);
 function withSpotifyApi(fn){if(spotifyApi)fn(spotifyApi);else spotifyApiWaiters.push(fn)}
 let audioCtrl=null,audioReady=false,audioCardId=null,audioFailed=false,discPlaying=false,discEnded=false,audioTimer=null;
+let lastAudioEventAt=0,lastAudioPosition=0;
+/* Watchdog: se l'embed smette di inviare eventi a fine anteprima, rileva la fine dalla posizione audio */
+setInterval(function(){
+  if(!discPlaying||!lastAudioEventAt)return;
+  if(Date.now()-lastAudioEventAt>6000&&lastAudioPosition>25000){
+    discEnded=true;discPlaying=false;
+    try{if(audioCtrl)audioCtrl.pause()}catch(e){}
+    updateDiscUI();
+  }
+},2500);
 function ensureAudio(card){
   if(!card||!card.id)return;
   if(audioCardId===card.id&&audioCtrl){updateDiscUI();return}
   if(audioCtrl){try{audioCtrl.destroy()}catch(e){}audioCtrl=null}
   clearTimeout(audioTimer);
   audioReady=false;audioFailed=false;audioCardId=card.id;discPlaying=false;discEnded=false;
+  lastAudioEventAt=0;lastAudioPosition=0;
   const slot=$('#embedSlot');if(slot)slot.innerHTML='';
   updateDiscUI();
   withSpotifyApi(function(api){
@@ -227,7 +238,7 @@ function ensureAudio(card){
             if(audioCardId!==card.id)return;
             audioReady=true;audioFailed=false;clearTimeout(audioTimer);showRetry(false);updateDiscUI();
           });
-          ctrl.addListener('playback_started',function(){discEnded=false;discPlaying=true;updateDiscUI()});
+          ctrl.addListener('playback_started',function(){lastAudioEventAt=Date.now();lastAudioPosition=0;discEnded=false;discPlaying=true;updateDiscUI()});
           ctrl.addListener('playback_update',function(e){onPlaybackUpdate((e&&e.data)||{})});
         }catch(e){audioFailed=true;updateDiscUI()}
       });
@@ -236,6 +247,7 @@ function ensureAudio(card){
   audioTimer=setTimeout(function(){if(!audioReady){audioFailed=true;updateDiscUI()}},15000);
 }
 function onPlaybackUpdate(d){
+  lastAudioEventAt=Date.now();lastAudioPosition=d.position||0;
   discPlaying=!d.isPaused;
   if(d.duration>0&&d.isPaused&&d.position>=d.duration-400){discEnded=true;discPlaying=false}
   else if(!d.isPaused){discEnded=false}
