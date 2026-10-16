@@ -39,6 +39,7 @@
     .panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:clamp(18px,4vw,30px);box-shadow:var(--shadow)}
     .section-title{font-size:1.05rem;margin:0 0 14px;font-weight:800}.section-title strong{color:var(--pink)}
     .players-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+    .player-count{max-width:280px;margin-bottom:14px}
     label{display:grid;gap:7px;font-size:.86rem;color:var(--muted);font-weight:750}
     input,select,textarea{width:100%;border:1px solid var(--line);background:var(--surface2);color:var(--text);border-radius:13px;padding:13px 14px;min-height:48px}
     textarea{min-height:96px;resize:vertical}
@@ -83,8 +84,19 @@
     </div>
 
     <section class="panel" aria-labelledby="setupTitle">
-      <h2 id="setupTitle" class="section-title">Preparate i vostri <strong>4 giocatori</strong></h2>
-      <div class="players-grid">
+      <h2 id="setupTitle" class="section-title">Preparate i vostri <strong id="playerCountLabel">4 giocatori</strong></h2>
+      <label class="player-count">Numero di giocatori
+        <select id="playerCount">
+          <option value="2">2 giocatori</option>
+          <option value="3">3 giocatori</option>
+          <option value="4" selected>4 giocatori</option>
+          <option value="5">5 giocatori</option>
+          <option value="6">6 giocatori</option>
+          <option value="7">7 giocatori</option>
+          <option value="8">8 giocatori</option>
+        </select>
+      </label>
+      <div class="players-grid" id="playersGrid">
         <label>Nome 1<input class="player-name" value="Giocatore 1" maxlength="18" /></label>
         <label>Nome 2<input class="player-name" value="Giocatore 2" maxlength="18" /></label>
         <label>Nome 3<input class="player-name" value="Giocatore 3" maxlength="18" /></label>
@@ -265,7 +277,7 @@ function startGame(){
   const names=$$('.player-name').map((el,i)=>el.value.trim()||('Giocatore '+(i+1)));
   state.players=names.map(name=>({name,tokens:0,timeline:[]}));state.target=Number($('#target').value);state.current=0;state.card=null;state.slot=null;state.phase='ready';
   const chosen=getDeck($('#deckMode').value);state.deck=shuffle(chosen.concat(parseCustom($('#customDeck').value)));
-  if(state.deck.length<4){toast('Servono almeno 4 carte');return}
+  if(state.deck.length<state.players.length){toast('Servono almeno '+state.players.length+' carte, una per giocatore');return}
   state.players.forEach(p=>{p.timeline=[state.deck.pop()]});syncSpotifyPool();showScreen(game);renderGame();
 }
 function renderHeader(){
@@ -370,6 +382,21 @@ function returnToMenu(){
   state.players=[];state.deck=[];state.current=0;state.card=null;state.slot=null;state.phase='ready';state._artistGuess='';state._titleGuess='';state._correct=null;state._bonus=false;zone.innerHTML='';showScreen(setup)
 }
 function replay(){returnToMenu()}
+const savedNames=[];
+function syncSavedNames(){$$('.player-name').forEach((el,i)=>{savedNames[i]=el.value})}
+function renderNameFields(){
+  syncSavedNames();
+  const count=Number($('#playerCount').value),grid=$('#playersGrid');grid.innerHTML='';
+  for(let i=0;i<count;i++){
+    const label=document.createElement('label');label.appendChild(document.createTextNode('Nome '+(i+1)));
+    const input=document.createElement('input');input.className='player-name';input.maxLength=18;
+    input.value=savedNames[i]||('Giocatore '+(i+1));
+    (function(idx){input.addEventListener('input',function(){savedNames[idx]=input.value})})(i);
+    label.appendChild(input);grid.appendChild(label);
+  }
+  $('#playerCountLabel').textContent=count+' giocatori';
+}
+$('#playerCount').addEventListener('change',renderNameFields);renderNameFields();
 $('#startBtn').addEventListener('click',startGame);$('#gameMenuBtn').addEventListener('click',()=>exitDialog.showModal());$('#cancelExitBtn').addEventListener('click',()=>exitDialog.close());$('#confirmExitBtn').addEventListener('click',returnToMenu);$('#replayBtn').addEventListener('click',replay);$('#winnerMenuBtn').addEventListener('click',returnToMenu);$('#deckMode').addEventListener('change',updateDeckDetails);updateDeckDetails();
 const dialog=$('#rulesDialog');$$('.rulesBtn').forEach(b=>b.addEventListener('click',()=>dialog.showModal()));$('#closeRules').addEventListener('click',()=>dialog.close());dialog.addEventListener('click',e=>{if(e.target===dialog)dialog.close()});
 })();
