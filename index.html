@@ -3,7 +3,6 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <meta name="robots" content="noindex, nofollow" />
   <meta name="color-scheme" content="light dark" />
   <meta name="theme-color" content="#090b18" />
   <link rel="icon" href="data:," />
@@ -51,8 +50,6 @@
     .btn-primary{background:var(--pink);color:#160612;box-shadow:0 9px 26px rgba(255,63,145,.27)}
     .btn-secondary{background:var(--surface2);border:1px solid var(--line)}
     .btn-cyan{background:var(--cyan);color:#041b1a}.btn:disabled{opacity:.42;cursor:not-allowed;box-shadow:none}
-    .ideas{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.idea{padding:15px;border-radius:16px;background:var(--surface2);border:1px solid var(--line)}
-    .idea b{display:block;color:var(--yellow);font-size:.9rem;margin-bottom:5px}.idea p{margin:0;font-size:.78rem;color:var(--muted)}
     .game-head{display:grid;gap:12px;margin-bottom:18px}.game-toolbar{display:grid;grid-template-columns:auto 1fr;align-items:start;gap:10px}.score-row{display:flex;gap:8px;flex-wrap:wrap}.player-chip{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:8px 12px;font-size:.82rem;font-weight:850}.player-chip.active{border-color:var(--cyan);background:rgba(51,230,220,.12);box-shadow:0 0 0 2px rgba(51,230,220,.12)}
     .menu-btn{width:auto;min-height:38px;padding:7px 12px;border-color:rgba(51,230,220,.55);color:var(--cyan);white-space:nowrap}.game-meta{display:flex;justify-content:space-between;align-items:center;gap:12px;color:var(--muted);font-size:.84rem;font-weight:750}.turn-name{color:var(--text);font-size:1.35rem;letter-spacing:-.025em}
     .timeline-panel{padding:18px;margin-bottom:14px}.timeline-title{margin:0 0 12px;color:var(--muted);font-size:.82rem}.timeline{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.year-chip{min-width:64px;border-radius:999px;background:var(--cyan);color:#06201e;padding:9px 13px;text-align:center;font-weight:950;box-shadow:0 6px 20px rgba(51,230,220,.15)}
@@ -70,8 +67,8 @@
     .winner{text-align:center;min-height:72vh;display:grid;place-items:center}.winner-card{max-width:570px;width:100%}.winner-record{margin:0 auto 20px}.winner h1{font-size:clamp(2.3rem,10vw,4.7rem);max-width:none}.winner h1 span{color:var(--yellow)}.ranking{list-style:none;padding:0;margin:24px 0;text-align:left}.ranking li{display:flex;justify-content:space-between;gap:20px;padding:12px 5px;border-bottom:1px solid var(--line);font-weight:800}.ranking li:first-child{color:var(--cyan)}.winner-actions,.confirm-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px}.confirm-copy{margin:12px 0 22px;color:var(--muted)}
     dialog{width:min(92vw,620px);border:1px solid var(--line);border-radius:22px;background:var(--surface);color:var(--text);padding:0;box-shadow:var(--shadow)}dialog::backdrop{background:rgba(2,4,12,.78)}.modal-body{padding:24px}.modal-head{display:flex;justify-content:space-between;align-items:center;gap:12px}.modal-head h2{margin:0}.close{width:44px;height:44px;border-radius:50%;border:1px solid var(--line);background:var(--surface2);font-size:1.3rem;cursor:pointer}.rules{padding-left:20px}.rules li{margin:11px 0;color:var(--muted)}.rules strong{color:var(--text)}.tip{background:rgba(255,228,92,.11);border-radius:14px;padding:14px;color:var(--yellow);font-weight:800}
     .toast{position:fixed;left:50%;bottom:calc(18px + env(safe-area-inset-bottom));transform:translate(-50%,140%);background:var(--text);color:var(--bg);padding:11px 16px;border-radius:999px;font-weight:850;z-index:10;transition:transform .25s ease}.toast.show{transform:translate(-50%,0)}
-    @media(max-width:680px){.hero{grid-template-columns:1fr auto}.hero .record{width:88px}.covered-layout{grid-template-columns:1fr}.flip-card{height:250px}.listen{min-width:0}.mystery-prompt{grid-template-columns:64px 1fr;padding:13px 14px}.mystery-disc{width:64px}.ideas{grid-template-columns:1fr 1fr}.actions{grid-template-columns:1fr}.setup-options{grid-template-columns:1fr}.players-grid{grid-template-columns:1fr}.guess-grid{grid-template-columns:1fr}.external-search{grid-template-columns:1fr}.game-meta{align-items:flex-end}.slot{flex:1 1 calc(50% - 8px)}.btn{width:100%}.menu-btn{width:auto}.winner-actions,.confirm-actions{grid-template-columns:1fr}}
-    @media(max-width:390px){.hero .record{display:none}.ideas{grid-template-columns:1fr}.year-chip{min-width:56px}.panel{border-radius:18px}}
+    @media(max-width:680px){.hero{grid-template-columns:1fr auto}.hero .record{width:88px}.covered-layout{grid-template-columns:1fr}.flip-card{height:250px}.listen{min-width:0}.mystery-prompt{grid-template-columns:64px 1fr;padding:13px 14px}.mystery-disc{width:64px}.actions{grid-template-columns:1fr}.setup-options{grid-template-columns:1fr}.players-grid{grid-template-columns:1fr}.guess-grid{grid-template-columns:1fr}.external-search{grid-template-columns:1fr}.game-meta{align-items:flex-end}.slot{flex:1 1 calc(50% - 8px)}.btn{width:100%}.menu-btn{width:auto}.winner-actions,.confirm-actions{grid-template-columns:1fr}}
+    @media(max-width:390px){.hero .record{display:none}.year-chip{min-width:56px}.panel{border-radius:18px}}
   </style>
   <script defer src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
 </head>
@@ -104,7 +101,7 @@
       </div>
       <div class="setup-options">
         <label>Gettoni per vincere
-          <select id="target"><option value="5">5 · partita lampo</option><option value="7">7 · partita media</option><option value="10" selected>10 · partita completa</option></select>
+          <select id="target"><option value="5">5 · partita lampo</option><option value="7">7 · partita media</option><option value="10" selected>10 · partita completa</option><option value="20">20 · partita maratona</option></select>
         </label>
         <label>Espansione / mazzo
           <select id="deckMode">
@@ -124,19 +121,10 @@
       </label>
       <div class="actions">
         <button id="startBtn" class="btn btn-primary">Inizia la partita</button>
-        <button class="btn btn-secondary rulesBtn">Come si gioca</button>
+        <button class="btn btn-cyan rulesBtn">Come si gioca</button>
       </div>
     </section>
 
-    <section aria-labelledby="ideasTitle">
-      <h2 id="ideasTitle" class="section-title">Altre idee veloci per 4</h2>
-      <div class="ideas">
-        <article class="idea"><b>Intro al contrario</b><p>Canticchiate un ritornello al contrario: gli altri devono riconoscerlo.</p></article>
-        <article class="idea"><b>Parola proibita</b><p>Descrivete un film senza usare le tre parole più ovvie.</p></article>
-        <article class="idea"><b>Quiz 2 contro 2</b><p>Ogni coppia prepara cinque domande lampo per l'altra.</p></article>
-        <article class="idea"><b>Karaoke roulette</b><p>Scegliete un brano a sorpresa e date voti solo alla presenza scenica.</p></article>
-      </div>
-    </section>
   </section>
 
   <section id="gameScreen" class="screen" hidden>
@@ -172,14 +160,15 @@
   <div class="modal-body">
     <div class="modal-head"><h2 id="rulesTitle">Come si gioca</h2><button id="closeRules" class="close" aria-label="Chiudi">×</button></div>
     <ol class="rules">
-      <li>A turno peschi una carta e ascolti l'anteprima di 30 secondi su Spotify.</li>
-      <li><strong>Facoltativo:</strong> indovina artista <strong>e</strong> titolo → +1 gettone bonus!</li>
-      <li>Poi piazza la carta sulla tua timeline: indovina l'anno di uscita (prima, dopo o tra le carte che hai già).</li>
-      <li><strong>Anno giusto:</strong> tieni la carta e guadagni +1 gettone.</li>
-      <li><strong>Anno sbagliato:</strong> la carta viene scartata.</li>
-      <li>Vince chi arriva per primo al traguardo!</li>
+      <li><strong>Obiettivo:</strong> essere il primo a raggiungere il traguardo di gettoni scelto a inizio partita (5, 7, 10 o 20).</li>
+      <li><strong>Preparazione:</strong> ogni giocatore riceve una carta scoperta: è la prima della sua timeline.</li>
+      <li><strong>Il turno:</strong> pesca una carta e ascolta l'anteprima di circa 30 secondi, senza vedere titolo e anno.</li>
+      <li><strong>Ipotesi bonus (facoltativa):</strong> se indovini artista <strong>e</strong> titolo, guadagni +1 gettone extra.</li>
+      <li><strong>Piazza la carta:</strong> scegli dove va nella tua timeline (prima, tra o dopo le carte che hai già), in ordine cronologico. Se l'anno è uguale a una carta che hai già, va bene da entrambi i lati.</li>
+      <li><strong>Anno giusto:</strong> tieni la carta nella timeline e guadagni +1 gettone. <strong>Anno sbagliato:</strong> la carta viene scartata.</li>
+      <li><strong>Vittoria:</strong> chi raggiunge per primo il traguardo vince. Se il mazzo finisce prima, vince chi ha più gettoni.</li>
     </ol>
-    <p class="tip">Consiglio: il telefono lo tiene in mano chi NON gioca il turno, così nessuno sbircia 😉</p>
+    <p class="tip">Consiglio: il telefono lo tiene in mano chi NON gioca il turno, così nessuno sbircia.</p>
   </div>
 </dialog>
 <dialog id="exitGameDialog" aria-labelledby="exitGameTitle">
